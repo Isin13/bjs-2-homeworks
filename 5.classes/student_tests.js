@@ -57,3 +57,71 @@ describe('Домашнее задание к лекции 5 «Классы». Д
     });
   });
 });
+
+class Student {
+  constructor(name) {
+    this.name = name;
+    this.marks = {};
+  }
+
+  addMark(mark, subject) {
+    if (mark < 2 || mark > 5) {
+      return;
+    }
+    if (!this.marks[subject]) {
+      this.marks[subject] = [];
+    }
+    this.marks[subject].push(mark);
+  }
+
+  getAverageBySubject(subject) {
+    if (!this.marks[subject]) {
+      return 0;
+    }
+    const sum = this.marks[subject].reduce((total, mark) => total + mark, 0);
+    const avg = sum / this.marks[subject].length;
+    return avg;
+  }
+
+  getAverage() {
+    const subjects = Object.keys(this.marks);
+    if (subjects.length === 0) {
+      return 0;
+    }
+    const sum = subjects.reduce((total, subject) => total + this.getAverageBySubject(subject), 0);
+    const avg = sum / subjects.length;
+    return avg;
+  }
+
+  exclude(subject) {
+    delete this.marks[subject];
+  }
+
+  // остальные методы класса
+
+}
+
+// Примеры использования
+const student = new Student("Иван Петров");
+
+// добавление оценок по разным предметам
+student.addMark(3, "математика");
+student.addMark(5, "математика");
+student.addMark(5, "физика");
+student.addMark(4, "химия");
+student.addMark(4, "физика");
+student.addMark(3, "литература");
+student.addMark(5, "ифнорматика");
+student.addMark(5, "ифнорматика");
+student.addMark(5, "ифнорматика");
+
+// удаление оценок по предмету
+student.exclude("химия");
+
+// получение средней оценки по предмету
+console.log(student.getAverageBySubject("математика")); // 4
+console.log(student.getAverageBySubject("физика")); // 4.5
+console.log(student.getAverageBySubject("химия")); // 0
+
+// получение общей средней оценки по всем предметам
+console.log(student.getAverage()); // 4.25
